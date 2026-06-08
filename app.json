@@ -1,0 +1,48 @@
+{
+  "expo": {
+    "name": "SEBO APP",
+    "slug": "sebo-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./ativos/images/icon.png",
+    "scheme": "bibliotecaapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./ativos/images/android-icon-foreground.png",
+        "backgroundImage": "./ativos/images/android-icon-background.png",
+        "monochromeImage": "./ativos/images/android-icon-monochrome.png"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./ativos/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./ativos/images/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff",
+          "dark": {
+            "backgroundColor": "#000000"
+          }
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}
