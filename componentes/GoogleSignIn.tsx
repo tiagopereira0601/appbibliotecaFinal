@@ -1,8 +1,8 @@
-import { TouchableOpacity, Text, StyleSheet, Platform, View } from 'react-native';
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
-import { useAuth } from '../app/context/AuthContext';
-import { useRouter } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import { useRouter } from 'expo-router';
+import { Platform, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { useAuth } from '../app/context/AuthContext';
 
 // Configure Google Sign-In
 GoogleSignin.configure({
