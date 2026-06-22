@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { useAuth } from "../context/AuthContext";
 
 export default function ProfileScreen() {

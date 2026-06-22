@@ -1,7 +1,6 @@
 import { Stack } from "expo-router";
-import { AuthProvider, useAuth } from "./context/AuthContext";
-import { useState, useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 
 function RootLayoutNav() {
   const { isLoading, user } = useAuth();
