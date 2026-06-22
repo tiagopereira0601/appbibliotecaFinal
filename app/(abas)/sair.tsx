@@ -84,7 +84,7 @@ export default function Sair() {
           textAlign: 'center',
           lineHeight: 24,
         }}>
-          Você está logado no sistema da Biblioteca Virtual.
+          Você está logado no iBook.
         </Text>
 
         <TouchableOpacity 

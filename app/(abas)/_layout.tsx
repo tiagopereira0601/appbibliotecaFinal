@@ -23,7 +23,7 @@ export default function TabLayout() {
           color: "#fff",
           letterSpacing: 2,
         }}>
-          BIBLIOTECA VIRTUAL
+          iBook 📚
         </Text>
       </View>
 

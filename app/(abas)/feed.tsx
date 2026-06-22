@@ -34,7 +34,7 @@ export default function Feed() {
         const postsDefault: Post[] = [
           {
             id: '1',
-            titulo: 'Bem-vindo à Biblioteca Virtual',
+            titulo: 'Bem-vindo ao iBook 📚',
             descricao: 'Aqui você pode emprestar livros, cadastrar novos títulos e acompanhar suas leituras!',
             tipo: 'noticia',
             data: new Date().toISOString(),
