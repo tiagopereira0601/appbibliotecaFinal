@@ -50,20 +50,20 @@ export default function Splash() {
         <Text style={{
           fontSize: 48,
           fontWeight: 'bold',
-          color: '#fff',
-          letterSpacing: 2,
-          marginBottom: 20,
-        }}>
-          BIBLIOTECA
-        </Text>
-        <Text style={{
-          fontSize: 48,
-          fontWeight: 'bold',
           color: '#a7c957',
           letterSpacing: 2,
           textAlign: 'center',
         }}>
-          VIRTUAL
+          iBook
+        </Text>
+        <Text style={{
+          fontSize: 16,
+          color: '#fff',
+          letterSpacing: 1,
+          textAlign: 'center',
+          marginTop: 10,
+        }}>
+          📚 Sua Biblioteca Digital
         </Text>
       </Animated.View>
 
