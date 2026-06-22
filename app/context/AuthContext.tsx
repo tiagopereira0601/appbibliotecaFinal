@@ -1,6 +1,6 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import safeAsyncStorage from "../../ganchos/useStorage";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { api } from "../../constantes/apiClient";
+import safeAsyncStorage from "../../ganchos/useStorage";
 
 interface User {
   id: string;
@@ -17,6 +17,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, name: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  googleSignIn: (googleUser: any) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -133,8 +134,55 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const googleSignIn = async (googleUser: any) => {
+    try {
+      console.log('[AUTH] Google Sign-In iniciado');
+      
+      const { id, email, name, photo } = googleUser;
+      
+      if (!email) {
+        throw new Error('Email do Google não disponível');
+      }
+
+      // Check if user already exists
+      const existingUsers = await api.get(`/users?email=${email}`);
+      
+      let user: User;
+      
+      if (existingUsers.data.length > 0) {
+        // User exists, use existing
+        user = existingUsers.data[0];
+        console.log('[AUTH] Usuário Google já existia');
+      } else {
+        // Create new user from Google
+        user = {
+          id: id || `google_${Date.now()}`,
+          email,
+          name,
+          role: 'user',
+          createdAt: new Date().toISOString(),
+        };
+        
+        const createResponse = await api.post('/users', user);
+        user = createResponse.data;
+        console.log('[AUTH] Novo usuário criado via Google');
+      }
+
+      // Store user locally (without sensitive data)
+      const userToStore = { ...user };
+      delete userToStore.password;
+      
+      setUser(userToStore);
+      await safeAsyncStorage.setItem('user', JSON.stringify(userToStore));
+      console.log(`[AUTH] Google Sign-In bem-sucedido para ${email}`);
+    } catch (error: any) {
+      console.error('[AUTH] Erro no Google Sign-In:', error.message);
+      throw error;
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ isLoading, user, login, register, logout }}>
+    <AuthContext.Provider value={{ isLoading, user, login, register, logout, googleSignIn }}>
       {children}
     </AuthContext.Provider>
   );

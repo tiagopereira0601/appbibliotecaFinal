@@ -3,6 +3,7 @@ import { StyleSheet, TextInput, View, TouchableOpacity, Alert, Text, ScrollView,
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { useAuth } from './context/AuthContext';
+import GoogleSignInButton from '../componentes/GoogleSignIn';
 
 export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
@@ -155,6 +156,8 @@ export default function Login() {
                 <Text style={styles.botaoTexto}>Entrar</Text>
               )}
             </TouchableOpacity>
+
+            <GoogleSignInButton />
 
             <View style={styles.divider}>
               <View style={styles.line} />
