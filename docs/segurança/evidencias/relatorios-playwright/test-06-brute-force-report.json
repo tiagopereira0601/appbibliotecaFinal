@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-06-22T12:26:43.072Z",
+  "testName": "test-06-brute-force",
+  "status": "PASS",
+  "owasp": "A07: Authentication Failures",
+  "details": {
+    "email": "reader@biblioteca.local",
+    "failedAttempts": 1,
+    "lockedOut": true,
+    "threshold": 5
+  }
+}

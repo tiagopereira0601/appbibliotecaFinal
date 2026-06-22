@@ -1,0 +1,116 @@
+{
+  "testUsers": {
+    "admin": {
+      "id": "admin-001",
+      "email": "admin@biblioteca.local",
+      "password": "SecureAdmin@2024",
+      "role": "admin",
+      "permissions": ["read", "write", "delete", "admin"]
+    },
+    "reader": {
+      "id": "reader-001",
+      "email": "reader@biblioteca.local",
+      "password": "ReaderUser@2024",
+      "role": "reader",
+      "permissions": ["read", "write"]
+    },
+    "weakPassword": {
+      "email": "weak@biblioteca.local",
+      "password": "123456",
+      "shouldFail": true
+    },
+    "invalidEmail": {
+      "email": "not-an-email",
+      "password": "ValidPass@123",
+      "shouldFail": true
+    }
+  },
+  "testBooks": [
+    {
+      "id": "book-001",
+      "title": "Clean Code",
+      "author": "Robert C. Martin",
+      "genre": "Technical",
+      "isbn": "978-0132350884",
+      "available": true,
+      "copies": 3
+    },
+    {
+      "id": "book-002",
+      "title": "Design Patterns",
+      "author": "Gang of Four",
+      "genre": "Technical",
+      "isbn": "978-0201633610",
+      "available": false,
+      "copies": 0
+    },
+    {
+      "id": "book-003",
+      "title": "The Pragmatic Programmer",
+      "author": "David Thomas",
+      "genre": "Technical",
+      "isbn": "978-0201616224",
+      "available": true,
+      "copies": 1
+    },
+    {
+      "id": "book-004",
+      "title": "O Quinto Elemento",
+      "author": "Author Fiction",
+      "genre": "Fiction",
+      "isbn": "978-1234567890",
+      "available": true,
+      "copies": 5
+    }
+  ],
+  "xssPayloads": [
+    "<script>alert('xss')</script>",
+    "<img src=x onerror=\"alert('xss')\">",
+    "<svg/onload=alert('xss')>",
+    "<body onload=alert('xss')>",
+    "javascript:alert('xss')",
+    "<iframe src=\"javascript:alert('xss')\"></iframe>",
+    "<embed src=\"data:text/html;base64,PHNjcmlwdD5hbGVydCgneHNzJyk8L3NjcmlwdD4=\">"
+  ],
+  "sqlInjectionPayloads": [
+    "' OR '1'='1",
+    "admin' --",
+    "1; DROP TABLE users--",
+    "' UNION SELECT * FROM admin--"
+  ],
+  "bruteForceTests": {
+    "email": "reader@biblioteca.local",
+    "invalidPasswords": [
+      "wrong1",
+      "wrong2",
+      "wrong3",
+      "wrong4",
+      "wrong5",
+      "wrong6",
+      "wrong7",
+      "wrong8",
+      "wrong9",
+      "wrong10"
+    ],
+    "correctPassword": "ReaderUser@2024",
+    "lockoutThreshold": 5,
+    "lockoutDuration": 15
+  },
+  "rateLimit": {
+    "endpoint": "/api/search",
+    "requestsPerMinute": 60,
+    "burstLimit": 10,
+    "testRequests": 100
+  },
+  "sessionTimeout": {
+    "timeoutMs": 900000,
+    "warningMs": 840000,
+    "testWaitMs": 15000
+  },
+  "csrfTokens": {
+    "headerName": "X-CSRF-Token",
+    "cookieName": "csrf-token",
+    "validToken": "valid-csrf-token-123abc",
+    "invalidToken": "invalid-csrf-token"
+  }
+}

@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "SEBO APP",
-    "slug": "sebo-app",
+    "name": "iBook",
+    "slug": "ibook",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./ativos/images/icon.png",
-    "scheme": "bibliotecaapp",
+    "scheme": "ibookapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {

@@ -1,11 +1,14 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import safeAsyncStorage from "../../ganchos/useStorage"; // wrapper seguro para AsyncStorage
+import safeAsyncStorage from "../../ganchos/useStorage";
+import { api } from "../../constantes/apiClient";
 
 interface User {
   id: string;
   email: string;
   name: string;
-  password: string;
+  password?: string;
+  role?: string;
+  createdAt?: string;
 }
 
 interface AuthContextType {
@@ -33,12 +36,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const bootstrapAsync = async () => {
       try {
+        // Try to restore session from local storage first
         const userJson = await safeAsyncStorage.getItem('user');
         if (userJson) {
           setUser(JSON.parse(userJson));
+          console.log('[AUTH] Sessão restaurada do armazenamento local');
         }
       } catch (e) {
-        console.log('[AUTH] Falha ao restaurar sessão do usuário');
+        console.error('[AUTH] Erro ao restaurar sessão:', e);
       } finally {
         setIsLoading(false);
       }
@@ -49,61 +54,71 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     try {
-      if (email.toLowerCase() === 'admin' && password === '123') {
-        const adminUser: User = {
-          id: 'admin',
-          email: 'Admin',
-          name: 'Admin',
-          password: '123',
-        };
-
-        setUser(adminUser);
-        await safeAsyncStorage.setItem('user', JSON.stringify(adminUser));
-        return;
-      }
-
-      const usersJson = await safeAsyncStorage.getItem('users');
-      const users: User[] = usersJson ? JSON.parse(usersJson) : [];
+      console.log(`[AUTH] Tentando login com email: ${email}`);
       
+      // Fetch users from backend
+      const response = await api.get('/users');
+      const users: User[] = response.data;
+      
+      // Find user by email and password
       const foundUser = users.find(u => u.email === email && u.password === password);
       
       if (!foundUser) {
         throw new Error('Email ou senha inválidos');
       }
 
-      setUser(foundUser);
-      await safeAsyncStorage.setItem('user', JSON.stringify(foundUser));
-    } catch (error) {
+      // Remove password from user object before storing locally
+      const userToStore = { ...foundUser };
+      delete userToStore.password;
+
+      setUser(userToStore);
+      await safeAsyncStorage.setItem('user', JSON.stringify(userToStore));
+      console.log(`[AUTH] Login bem-sucedido para ${email}`);
+    } catch (error: any) {
+      console.error('[AUTH] Erro no login:', error.message);
       throw error;
     }
   };
 
   const register = async (email: string, name: string, password: string) => {
     try {
+      console.log(`[AUTH] Tentando registrar usuário: ${email}`);
+
       if (password.length < 6) {
         throw new Error('Senha deve ter pelo menos 6 caracteres');
       }
 
-      const usersJson = await safeAsyncStorage.getItem('users');
-      const users: User[] = usersJson ? JSON.parse(usersJson) : [];
+      // Fetch existing users
+      const response = await api.get('/users');
+      const users: User[] = response.data;
       
       if (users.some(u => u.email === email)) {
         throw new Error('Email já cadastrado');
       }
 
+      // Create new user
       const newUser: User = {
         id: Date.now().toString(),
         email,
         name,
-        password
+        password,
+        role: 'user',
+        createdAt: new Date().toISOString(),
       };
 
-      users.push(newUser);
-      await safeAsyncStorage.setItem('users', JSON.stringify(users));
-      
-      setUser(newUser);
-      await safeAsyncStorage.setItem('user', JSON.stringify(newUser));
-    } catch (error) {
+      // Save to backend
+      const createResponse = await api.post('/users', newUser);
+      const savedUser = createResponse.data;
+
+      // Remove password before storing locally
+      const userToStore = { ...savedUser };
+      delete userToStore.password;
+
+      setUser(userToStore);
+      await safeAsyncStorage.setItem('user', JSON.stringify(userToStore));
+      console.log(`[AUTH] Usuário registrado com sucesso: ${email}`);
+    } catch (error: any) {
+      console.error('[AUTH] Erro no registro:', error.message);
       throw error;
     }
   };
@@ -112,6 +127,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       setUser(null);
       await safeAsyncStorage.removeItem('user');
+      console.log('[AUTH] Logout bem-sucedido');
     } catch (error) {
       throw error;
     }
