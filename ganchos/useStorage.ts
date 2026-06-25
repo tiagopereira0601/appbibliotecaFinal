@@ -40,6 +40,22 @@ const safeAsyncStorage = {
       return keys.map(k => [k, null]);
     }
   },
+  removeItem: async (key: string) => {
+    try {
+      return await AsyncStorage.removeItem(key);
+    } catch (error) {
+      console.warn(`[STORAGE] Erro ao remover ${key}:`, error);
+      return null;
+    }
+  },
+  clear: async () => {
+    try {
+      return await AsyncStorage.clear();
+    } catch (error) {
+      console.warn('[STORAGE] Erro ao limpar AsyncStorage:', error);
+      return null;
+    }
+  },
 };
 
 export default safeAsyncStorage;

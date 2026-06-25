@@ -1,7 +1,7 @@
-import { View, Text, Image, TouchableOpacity, ScrollView, Alert, ActivityIndicator, Platform } from "react-native"; // importa componentes visuais e utilitários do React Native
 import { useLocalSearchParams, useRouter } from "expo-router"; // importa hooks de navegação do Expo Router
-import { API } from '../constantes/api'; // importa a URL base da API do backend na pasta constantes
 import { useState } from "react"; // importa hook de estado do React
+import { ActivityIndicator, Alert, Image, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native"; // importa componentes visuais e utilitários do React Native
+import { API } from '../constantes/api'; // importa a URL base da API do backend na pasta constantes
 
 export default function BookDetails() { // componente de detalhes de livro
   const { book } = useLocalSearchParams(); // lê o parâmetro enviado pela rota
@@ -12,7 +12,7 @@ export default function BookDetails() { // componente de detalhes de livro
   const emprestar = async () => { // função assíncrona que faz o empréstimo do livro
     setLoading(true); // mostra indicador de carregamento
     try {
-      const loanRes = await fetch(`${API}/emprestimos`, { // cria um novo empréstimo no backend
+      const loanRes = await fetch(`${API}/loans`, { // cria um novo empréstimo no backend
         method: "POST",
         headers: { "Content-Type": "application/json" }, // envia JSON
         body: JSON.stringify({
@@ -28,7 +28,7 @@ export default function BookDetails() { // componente de detalhes de livro
         throw new Error('Erro ao criar empréstimo');
       }
 
-      const bookRes = await fetch(`${API}/livros/${item.id}`, { // marca o livro como emprestado
+      const bookRes = await fetch(`${API}/books/${item.id}`, { // marca o livro como emprestado
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ emprestado: true })

@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import { View, Text } from "react-native";
+import { Text, View } from "react-native";
 
 export default function TabLayout() {
   return (
@@ -80,6 +80,20 @@ export default function TabLayout() {
           options={{
             title: "Empréstimos",
             tabBarLabel: "Empréstimos",
+          }}
+        />
+        <Tabs.Screen
+          name="iquizCriar"
+          options={{
+            title: "CRIAR QUIZ",
+            tabBarLabel: "CRIAR QUIZ",
+          }}
+        />
+        <Tabs.Screen
+          name="iquizJogar"
+          options={{
+            title: "JOGAR QUIZ",
+            tabBarLabel: "JOGAR QUIZ",
           }}
         />
         <Tabs.Screen

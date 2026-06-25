@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity, Alert, Platform } from "react-native";
 import { useRouter } from "expo-router";
+import { Alert, Platform, Text, TouchableOpacity, View } from "react-native";
 import { useAuth } from "../context/AuthContext";
 
 export default function Sair() {

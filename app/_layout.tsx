@@ -14,11 +14,7 @@ function RootLayoutNav() {
   }
 
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
+    <Stack screenOptions={{ headerShown: false }}>
       {user ? (
         <Stack.Screen name="(abas)" options={{ headerShown: false }} />
       ) : (

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-06-22T12:26:43.072Z",
+  "timestamp": "2026-06-24T18:33:19.142Z",
   "testName": "test-06-brute-force",
   "status": "PASS",
   "owasp": "A07: Authentication Failures",

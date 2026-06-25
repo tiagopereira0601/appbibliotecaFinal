@@ -25,7 +25,7 @@ console.log(`[iBook API] LAN_IP: ${LAN_IP || 'not configured'}`);
 // Create Axios instance with timeout and headers
 const api: AxiosInstance = axios.create({
   baseURL: API_URL,
-  timeout: 10000,
+  timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -62,3 +62,4 @@ api.interceptors.response.use(
 );
 
 export { api, API_URL, LAN_IP };
+

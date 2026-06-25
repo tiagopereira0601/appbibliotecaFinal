@@ -1,7 +1,6 @@
-import { View, Text, FlatList, TouchableOpacity, Modal, TextInput, Alert, ActivityIndicator, Platform, ScrollView } from "react-native";
-import { useState, useEffect } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { ActivityIndicator, Alert, FlatList, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import safeAsyncStorage from "../../ganchos/useStorage"; // wrapper seguro para AsyncStorage
 
 interface Post {

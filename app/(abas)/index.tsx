@@ -1,23 +1,25 @@
-import { View, Text, FlatList, TouchableOpacity, Image, ActivityIndicator, Platform } from "react-native";
-import { useEffect, useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { useRouter } from "expo-router";
+import { useCallback, useEffect, useState } from "react";
+import { ActivityIndicator, FlatList, Image, Platform, Text, TouchableOpacity, View } from "react-native";
+import { Tutorial } from "../../componentes/tutorial";
 import { API } from "../../constantes/api";
 
 export default function Home() {
   const [livros, setLivros] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [tutorialVisible, setTutorialVisible] = useState(false);
   const router = useRouter();
 
   const carregar = async () => {
     try {
       setLoading(true);
-      console.log(`[HOME] Carregando livros de: ${API}/livros`);
+      console.log(`[HOME] Carregando livros de: ${API}/books`);
       
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
       
-      const res = await fetch(`${API}/livros`, { signal: controller.signal });
+      const res = await fetch(`${API}/books`, { signal: controller.signal });
       clearTimeout(timeoutId);
       
       console.log(`[HOME] Status: ${res.status}`);
@@ -144,26 +146,43 @@ export default function Home() {
   return (
     <View style={{ flex: 1, backgroundColor: "#e8f5e9" }}>
       <View style={{ paddingTop: 20, paddingHorizontal: 15 }}>
-        <Text
-          style={{
-            fontSize: 28,
-            fontWeight: "800",
-            color: "#1b4332",
-            marginBottom: 5,
-          }}
-        >
-          Biblioteca
-        </Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View style={{ flex: 1 }}>
+            <Text
+              style={{
+                fontSize: 28,
+                fontWeight: "800",
+                color: "#1b4332",
+                marginBottom: 5,
+              }}
+            >
+              Biblioteca
+            </Text>
 
-        <Text
-          style={{
-            fontSize: 14,
-            color: "#666",
-            marginBottom: 15,
-          }}
-        >
-          {livros.length} livros disponíveis
-        </Text>
+            <Text
+              style={{
+                fontSize: 14,
+                color: "#666",
+                marginBottom: 15,
+              }}
+            >
+              {livros.length} livros disponíveis
+            </Text>
+          </View>
+          <TouchableOpacity
+            onPress={() => setTutorialVisible(true)}
+            style={{
+              paddingHorizontal: 12,
+              paddingVertical: 8,
+              backgroundColor: '#8b5cf6',
+              borderRadius: 8,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Text style={{ fontSize: 20 }}>📚</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <FlatList
@@ -184,6 +203,8 @@ export default function Home() {
           </View>
         }
       />
+
+      <Tutorial visible={tutorialVisible} onClose={() => setTutorialVisible(false)} />
     </View>
   );
 }

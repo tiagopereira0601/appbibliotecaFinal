@@ -1,7 +1,9 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, TextInput, View, TouchableOpacity, Alert, Text, ScrollView, ActivityIndicator, Platform } from 'react-native';
-import { useState } from 'react';
 import { useRouter } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { useState } from 'react';
+import { ActivityIndicator, Alert, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import GoogleSignInButton from '../componentes/GoogleSignIn';
+import { Tutorial } from '../componentes/tutorial';
 import { useAuth } from './context/AuthContext';
 
 export default function Login() {
@@ -12,6 +14,7 @@ export default function Login() {
   const [senha, setSenha] = useState('123');
   const [confirmaSenha, setConfirmaSenha] = useState('');
   const [loading, setLoading] = useState(false);
+  const [tutorialVisible, setTutorialVisible] = useState(false);
 
   const router = useRouter();
   const auth = useAuth();
@@ -103,8 +106,7 @@ export default function Login() {
   return (
     <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.header}>
-        <Text style={styles.title}>BIBLIOTECA</Text>
-        <Text style={styles.subtitle}>VIRTUAL</Text>
+        <Text style={styles.title}>IBOOK</Text>
       </View>
 
       <View style={styles.formContainer}>
@@ -161,6 +163,8 @@ export default function Login() {
               <Text style={styles.dividerText}>ou</Text>
               <View style={styles.line} />
             </View>
+
+            <GoogleSignInButton />
 
             <TouchableOpacity 
               style={styles.botaoSecundario}
@@ -275,6 +279,22 @@ export default function Login() {
           marginTop: 20,
           marginHorizontal: 20,
           padding: 12,
+          backgroundColor: "#8b5cf6",
+          borderRadius: 10,
+          alignItems: "center"
+        }}
+        onPress={() => setTutorialVisible(true)}
+      >
+        <Text style={{ color: "#fff", fontSize: 12, fontWeight: "600" }}>
+          📚 TUTORIAL
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={{
+          marginTop: 10,
+          marginHorizontal: 20,
+          padding: 12,
           backgroundColor: "#555",
           borderRadius: 10,
           alignItems: "center"
@@ -285,6 +305,8 @@ export default function Login() {
           🔍 Diagnóstico de Conexão
         </Text>
       </TouchableOpacity>
+
+      <Tutorial visible={tutorialVisible} onClose={() => setTutorialVisible(false)} />
 
       <StatusBar style="light" />
     </ScrollView>

@@ -1,6 +1,6 @@
-import { View, Text, Animated } from 'react-native';
-import { useEffect, useRef } from 'react';
 import { useRouter } from 'expo-router';
+import { useEffect, useRef } from 'react';
+import { Animated, Text, View } from 'react-native';
 import { useAuth } from './context/AuthContext';
 
 export default function Splash() {

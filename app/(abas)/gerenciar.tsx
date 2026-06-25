@@ -1,9 +1,8 @@
-import { View, Text, FlatList, TouchableOpacity, Alert, Modal, TextInput, ScrollView, ActivityIndicator, Image, Platform } from "react-native";
-import { useEffect, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import { useCallback } from "react";
-import { API } from "../../constantes/api";
 import * as ImagePicker from "expo-image-picker";
+import { useCallback, useEffect, useState } from "react";
+import { ActivityIndicator, Alert, FlatList, Image, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { API } from "../../constantes/api";
 
 export default function Gerenciar() {
   const [livros, setLivros] = useState<any[]>([]);
@@ -19,7 +18,7 @@ export default function Gerenciar() {
   const carregar = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${API}/livros`);
+      const res = await fetch(`${API}/books`);
       if (!res.ok) {
         throw new Error(`HTTP Error: ${res.status}`);
       }
@@ -87,7 +86,7 @@ export default function Gerenciar() {
 
     setSalvando(true);
     try {
-      const response = await fetch(`${API}/livros/${livroEmEdicao.id}`, {
+      const response = await fetch(`${API}/books/${livroEmEdicao.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -159,7 +158,7 @@ export default function Gerenciar() {
 
   const removerConfirmado = async (id: string) => {
     try {
-      const response = await fetch(`${API}/livros/${id}`, {
+      const response = await fetch(`${API}/books/${id}`, {
         method: "DELETE"
       });
       if (!response.ok) {

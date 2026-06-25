@@ -1,7 +1,6 @@
-import { View, Text, FlatList, TouchableOpacity, Modal, Alert, Image, ActivityIndicator, Platform } from "react-native";
-import { useEffect, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { ActivityIndicator, Alert, FlatList, Image, Modal, Platform, Text, TouchableOpacity, View } from "react-native";
 import { API } from "../../constantes/api";
 
 export default function Emprestimos() {
@@ -14,7 +13,7 @@ export default function Emprestimos() {
   const carregar = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${API}/emprestimos`);
+      const res = await fetch(`${API}/loans`);
       if (!res.ok) {
         throw new Error(`HTTP Error: ${res.status}`);
       }
@@ -71,7 +70,7 @@ export default function Emprestimos() {
         throw new Error('Erro ao atualizar livro');
       }
 
-      const updateLoanRes = await fetch(`${API}/emprestimos/${livroSelecionado.id}`, {
+      const updateLoanRes = await fetch(`${API}/loans/${livroSelecionado.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: "devolvido", rating })

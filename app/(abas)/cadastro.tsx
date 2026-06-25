@@ -1,7 +1,7 @@
-import { Text, TextInput, TouchableOpacity, Image, Alert, Platform, ScrollView, View, ActivityIndicator } from "react-native";
-import { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { useRouter } from "expo-router";
+import { useState } from "react";
+import { ActivityIndicator, Alert, Image, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { API } from "../../constantes/api";
 
 export default function Cadastro() {
@@ -45,53 +45,63 @@ export default function Cadastro() {
     setCarregando(true);
 
     try {
-      console.log(`[CADASTRO] Enviando para: ${API}/livros`);
-      
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // timeout de 10s
-      
-      const res = await fetch(`${API}/livros`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          titulo,
-          autor,
-          sinopse,
-          capa,
-          emprestado: false
-        }),
-        signal: controller.signal
-      });
+      const payload = { titulo, autor, sinopse, capa, emprestado: false };
 
-      clearTimeout(timeoutId);
+      const tryPost = async (path: string) => {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+        try {
+          console.log(`[CADASTRO] POST ${API}/${path}`);
+          const res = await fetch(`${API}/${path}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+            signal: controller.signal,
+          });
+          return res;
+        } finally {
+          clearTimeout(timeoutId);
+        }
+      };
+
+      let res = null as Response | null;
+      try {
+        res = await tryPost('books');
+      } catch (err) {
+        console.warn('[CADASTRO] Falha ao postar em /books, tentando /livros', err);
+        try {
+          res = await tryPost('livros');
+        } catch (err2) {
+          console.error('[CADASTRO] Falha em ambos endpoints:', err2);
+          throw new Error('Servidor indisponível (books/livros)');
+        }
+      }
+
+      if (!res) throw new Error('Resposta inválida do servidor');
+
       console.log(`[CADASTRO] Status: ${res.status}`);
-
       if (!res.ok) {
         let errorMessage = 'Erro ao salvar o livro';
         try {
           const errorData = await res.json();
-          errorMessage = errorData.error || errorMessage;
-        } catch {
-          const errorBody = await res.text();
-          errorMessage = errorBody || errorMessage;
+          errorMessage = errorData.error || JSON.stringify(errorData) || errorMessage;
+        } catch (e) {
+          try {
+            const txt = await res.text();
+            errorMessage = txt || errorMessage;
+          } catch {
+            // ignore
+          }
         }
         throw new Error(errorMessage);
       }
 
       console.log('[CADASTRO] Livro salvo com sucesso!');
-      
       if (Platform.OS === 'web') {
-        window.alert("Cadastrado com sucesso\nO livro foi adicionado à sua biblioteca!");
+        window.alert('Cadastrado com sucesso\nO livro foi adicionado à sua biblioteca!');
         goToHome();
       } else {
-        Alert.alert("Cadastrado com sucesso", "O livro foi adicionado à sua biblioteca!", [
-          {
-            text: "OK",
-            onPress: goToHome
-          }
-        ]);
+        Alert.alert('Cadastrado com sucesso', 'O livro foi adicionado à sua biblioteca!', [{ text: 'OK', onPress: goToHome }]);
       }
     } catch (error) {
       console.error('[CADASTRO] Erro:', error);
@@ -99,7 +109,7 @@ export default function Cadastro() {
       if (Platform.OS === 'web') {
         window.alert(`Erro: ${message}`);
       } else {
-        Alert.alert("Erro", message);
+        Alert.alert('Erro', message);
       }
     } finally {
       setCarregando(false);
@@ -209,7 +219,7 @@ export default function Cadastro() {
           color: '#1b4332',
           marginBottom: 12,
         }}>
-          Capa do Livro
+          Capa do Livro (opcional)
         </Text>
 
         <TouchableOpacity
@@ -230,7 +240,7 @@ export default function Cadastro() {
             fontWeight: '600',
             fontSize: 15,
           }}>
-            {capa ? "Mudar Capa" : "Escolher Capa"}
+            {capa ? "Mudar Capa" : "Escolher Capa (opcional)"}
           </Text>
         </TouchableOpacity>
 

@@ -5,25 +5,26 @@
 
 import { Platform } from 'react-native';
 
-const tintColorLight = '#58CC02';
-const tintColorDark = '#fff';
+// Paleta dourada personalizada
+const goldLight = '#b58900'; // primary gold
+const goldDark = '#ffd873';
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    text: '#2b2b2b',
+    background: '#fffaf5',
+    tint: goldLight,
+    icon: '#7a5b00',
+    tabIconDefault: '#7a5b00',
+    tabIconSelected: goldLight,
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    text: '#fff7e6',
+    background: '#2b1f0d',
+    tint: goldDark,
+    icon: '#e6c27a',
+    tabIconDefault: '#e6c27a',
+    tabIconSelected: goldDark,
   },
 };
 
